@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Navbar with Image Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Basic reset for the page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body and font setup */
+        body {
+            font-family: 'Lora', serif;
+            background-color: #fefefe; /* Background color for padding */
+        }
+
+        /* Audiowide font for the title */
+        .audiowide-regular {
+            font-family: 'Audiowide', sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 36px;
+            text-align: center;
+        }
+
+        /* General Navbar Styles */
+        .navbar {
+            background-color: #ffffff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-list {
+            list-style-type: none;
+            display: flex;
+            padding-left: 0;
+            margin-left: auto;
+            margin-right: auto;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .nav-item {
+            position: relative;
+            margin: 0 15px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 10px 25px;
+            color: black;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border-radius: 25px;
+            background-color: #ffffff;
+        }
+
+        .nav-item:hover .nav-link {
+            background-color: #cecece;
+            color: black;
+            transform: scale(1.1);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            font-size: 30px;
+            cursor: pointer;
+            color: black;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-list {
+                flex-direction: column;
+                max-height: 0;
+                overflow: hidden;
+                width: 100%;
+                background-color: #ffffff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-list.open {
+                max-height: 500px; /* Adjust as needed for your menu items */
+            }
+
+            .nav-item {
+                margin: 0;
+                text-align: center;
+            }
+
+            .nav-link {
+                font-size: 20px;
+                padding: 15px;
+                width: 100%;
+            }
+        }
+
+        /* Gallery styles */
+        .gallery {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: 770px; /* Set height */
+            width: 90%; /* Full width */
+            overflow: hidden; /* Hide overflow */
+            background-color: #fafafa; /* Background color for padding */
+            border-radius: 50px; /* Apply border-radius to the gallery container */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+            margin: 20px auto; /* Center the gallery */
+            margin-top: 0px;
+        }
+
+        .gallery::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent); /* Gradient from black to transparent */
+            z-index: 1; /* Place it above the images but below the text */
+        }
+
+        .gallery img {
+            position: absolute; /* Positioning for transition */
+            top: 0;
+            left: 0;
+            height: calc(100% - 0px); /* Full height minus padding */
+            object-fit: cover; /* Cover the area without distortion */
+            opacity: 0; /* Start hidden */
+            transition: opacity 1s ease, transform 0.5s ease; /* Fade effect */
+            z-index: 0; /* Place images below the gradient */
+        }
+
+        .gallery img.active {
+            opacity: 1; /* Show active image */
+        }
+
+        /* Button styles */
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #D3D3D3; /* Background color for buttons */
+            border: none;
+            font-size: 30px;
+            color: #000000;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.3s ease-in-out, background 0.3s ease; /* Smooth transition */
+            padding: 10px; /* Padding for buttons */
+            border-radius: 50%;
+        }
+
+        .prev-button {
+            left: 10px;
+        }
+
+        .next-button {
+            right: 10px;
+        }
+
+        /* Text display on image */
+        .image-text {
+            position: absolute;
+            top: 150px;
+            left: 60px;
+            color: white;
+            font-size: 70px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Garamond, Georgia, Times, Serif;
+            z-index: 10; /* Ensure text is above the images and gradient */
+        }
+
+        .first-word {
+            color: #f0e8be; /* Set the color for the first word */
+        }
+
+        /* Combined container styles */
+        .container {
+            display: flex;
+            width: 90%;
+            height: 500px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        /* Left side (Images with zoom-in effect) */
+        .image-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            border-radius: 30%;
+            background-color: #f0e8be;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transform: scale(1);
+            transition: transform 1s ease, opacity 1s ease;
+        }
+
+        .image-container img.active {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        /* Right side (Sliding text) */
+        .text-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding-left: 15px;
+            padding-right: 10px;
+            line-height: 2;
+            font-family: Arial, sans-serif;
+            transform: translateX(-100%); /* Initially hide text off the left */
+            opacity: 0; /* Initially hide text */
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out; /* Smooth transition */
+        }
+
+        /* Visible class will bring text into view from left */
+        .text-container.visible {
+            transform: translateX(0); /* Slide in from the left */
+            opacity: 1;
+        }
+
+        /* Styling for the paragraph text */
+        .text {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Footer styles */
+        .gallery-footer {
+            text-align: center;
+            font-size: 50px;
+            color: #333;
+            margin-top: 20px;
+            font-family: "Ultra", serif;
+            font-weight: 400;
+            transform: translateY(100%); /* Start off-screen */
+            opacity: 0; /* Start as invisible */
+            transition: transform 0.8s ease-out, opacity 0.8s ease-out; /* Smooth transition */
+        }
+
+        .gallery-footer.visible {
+            transform: translateY(0); /* Slide in to normal position */
+            opacity: 1; /* Make visible */
+        }
+
+        strong {
+            font-size: 4rem;
+            text-align: center;
+            display: inline-block;
+        }
+
+        /* Style for each word */
+        .word {
+            display: inline-block;
+            opacity: 0; /* Start as invisible */
+            transform: translateY(100%); /* Start off-screen */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Smooth transition */
+        }
+
+        /* Style for highlighted words */
+        .highlight {
+            color: #f0e8be;
+        }
+
+        /* Style for secondary words */
+        .secondary {
+            color: #9e9e9e;
+        }
+
+        /* Style for visible words */
+        .word.visible {
+            opacity: 1; /* Make visible */
+            transform: translateY(0); /* Slide in to normal position */
+        }
+
+        /* Style for the scroll container */
+        .scroll-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        /* Style for the scroll text */
+        .scroll-text {
+            flex: 1;
+            padding: 20px;
+            font-size: 1.2rem;
+            line-height: 1.5;
+            color: #333;
+            opacity: 0; /* Initially hide text */
+            transform: translateX(-100%); /* Initially hide text off the left */
+            transition: transform 1s ease-out, opacity 1s ease-out; /* Smooth transition */
+        }
+
+        .scroll-text.visible {
+            transform: translateX(0); /* Slide in from the left */
+            opacity: 1;
+        }
+
+        /* Style for the scroll image */
+        .scroll-image {
+            flex: 1;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .scroll-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0; /* Initially hide image */
+            transform: scale(1);
+            transition: transform 1s ease, opacity 1s ease;
+        }
+
+        .scroll-image img.visible {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        /* Responsive design for scroll container */
+        @media (max-width: 768px) {
+            .scroll-container {
+                flex-direction: column;
+            }
+
+            .scroll-text, .scroll-image {
+                width: 100%;
+                max-width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .scroll-text {
+                text-align: center; /* Center-align text for better appearance */
+                height: auto; /* Allow height to adjust */
+                margin-bottom: 20px; /* Add space between text and image */
+            }
+
+            .scroll-image {
+                height: auto; /* Allow height to adjust */
+            }
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 10px;
+        }
+
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-info {
+            flex: 1;
+            min-width: 250px;
+            margin: 10px;
+        }
+
+        .footer-info h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .footer-info p, .footer-info a {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+
+        .footer-info a:hover {
+            color: #fff;
+        }
+
+        .footer-social {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            content:center;
+            margin-top: 20px;
+        }
+
+        .footer-social img {
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-social img:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-info {
+                margin: 10px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <span class="hamburger" onclick="toggleMenu()">&#9776;</span>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+            <li class="nav-item"><span class="audiowide-regular">OAK'S PRIME INTERIOR</span></li>
+            <li class="nav-item"><a href="services.html" class="nav-link">Services</a></li>
+            <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="logo">
+        <img src="images/logo.png" class="image-slide" alt="Image" style="width: 500px; height: auto;border-radius: 20%;margin-left: 500px;">
+    </div>
+
+    <div class="gallery">
+        <img src="images/IMG-20200731-WA0020 copy.jpg" class="active" alt="Image 1">
+        <div class="image-text"><span class="first-word">Designing spaces</span>,<br> that inspire creativity and relaxation</div>
+
+        <img src="images/IMG-20200731-WA0025.jpg" alt=" Image 2">
+        <div class="image-text"><span class="first-word">Bringing your</span>,<br> dream home to life with style</div>
+
+        <img src="images/safeimagekit-IMG-20 200711-WA0071.jpg" alt="Image 3">
+        <div class="image-text"><span class="first-word">Where modern</span>,<br>elegance meets timeless interior design</div>
+
+        <img src="images/safeimagekit-WhatsApp Image 2024-07-01 at 17.11.56_1b0ccdd6.jpg" alt="Image 4">
+        <div class="image-text"><span class="first-word">Transforming rooms into beautiful</span>,<br> functional living spaces</div>
+
+        <button class="nav-button prev-button" id="prevButton">&#8592;</button>
+        <button class="nav-button next-button" id="nextButton">&#8594;</button>
+    </div>
+
+    <div class="gallery-footer fade-in">
+        <strong>
+            <span class="word highlight">Passionately</span>
+            <span class="word highlight">Designing</span>
+            <span class="word highlight">Spaces</span>
+            <br>
+            <span class="word secondary">Feel</span>
+            <span class="word secondary">Like</span>
+            <span class="word secondary">Home</span>
+        </strong>
+    </div>
+
+    <div class="container">
+        <div class="image-container">
+            <img src="images/WhatsApp Image 2024-07-01 at 17.11.56_ced422be.jpg" class="active" alt="Image 1">
+            <img src="images/WhatsApp Image 2024-07-01 at 17.11.56_a9a7fe70.jpg" alt="Image 2">
+            <img src="images/WhatsApp Image 2024-07-01 at 17.11.56_3373263f.jpg" alt="Image 3">
+        </div>
+
+        <div class="text-container fade-in">
+            <p class="text">At Oak's Prime Interior, we specialize in transforming spaces into stylish and functional environments. Our team of experts combines creativity and precision to deliver exceptional interior designs tailored to your needs. From residential to commercial spaces, we focus on creating timeless designs that inspire. Our mission is to bring your vision to life with attention to detail and high-quality craftsmanship. We are committed to providing personalized solutions that enhance the functionality and beauty of every room. Let us help you create a space that feels like home.</p>
+        </div>
+    </div>
+
+    <div class="scroll-container">
+        <!-- Left Text Block -->
+        <div class="scroll-text hidden-left">
+            <p class="scroll-description">
+                Transform your space into a masterpiece with Oak's Prime Interiors! Whether it's your home, office, or commercial space, we blend creativity, functionality, and elegance to craft designs that truly inspire. Our team of experts listens to your vision, tailoring every detail to reflect your unique style and needs. With a passion for perfection and a commitment to excellence, we create spaces that not only look stunning but also feel like home. Let us bring your dreams to life with designs that are timeless, sophisticated, and unforgettable. Choose Oak's Prime Interiors, where your vision meets artistry!
+            </p>
+        </div>
+
+        <!-- Right Image Block -->
+        <div class="scroll-image hidden-right">
+            <img src="images/WhatsApp Image 2024-07-01 at 17.11.56_e5fc2376 - Copy.jpg" alt="Interior Design" />
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Address Section -->
+            <div class="footer-info">
+                <h4>Address</h4>
+                <p>G2, Surya Kiran Apartment, Plot No.41, Flat No, East Srinivas Nagar Colony, Sanjeeva Reddy Nagar, Hyderabad, Telangana 500038</p>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="footer-info">
+                <h4>Contact Us</h4>
+                <p>Phone: <a href="tel:+1234567890">+91 8919171891</a></p>
+                <p>Email: <a href="mailto:info@example.com">Info@oaksprimeinteriors.com</a></p>
+            </div>
+
+            <!-- Social Media Logos -->
+            <div class="footer-info">
+                <h4>Follow Us</h4>
+                <div class="footer-social">
+                    <a href="https://facebook.com" target="_blank"><img src="images/download (1).png" alt="Facebook"></a>
+                    <a href="https://instagram.com" target="_blank"><img src="images/download.jpeg" alt="Instagram"></a>
+                    <a href="https://wa.me/918919171891" target="_blank"><img src="images/download.png" alt="Whatsapp"></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const images = document.querySelectorAll('.gallery img');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const imageTexts = document.querySelectorAll('.image-text');
+        let currentIndex = 0;
+
+        function showImage(index) {
+            images.forEach((img, i) => {
+                img.classList.remove('active');
+                imageTexts[i].style.display = 'none'; // Hide all text
+                if (i === index) {
+                    img.classList.add('active');
+                    imageTexts[i].style.display = 'block'; // Show text for current image
+                }
+            });
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage(currentIndex);
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            showImage(currentIndex);
+        }
+
+        nextButton.addEventListener('click', nextImage);
+        prevButton.addEventListener('click', prevImage);
+
+        setInterval(nextImage, 5000); // Change image every 5 seconds
+
+        showImage(currentIndex); // Initialize gallery
+
+        // Image zoom-in effect for the combined container
+        const containerImages = document.querySelectorAll('.image-container img');
+        let containerIndex = 0;
+
+        function changeContainerImage() {
+            containerImages[containerIndex].classList.remove('active');
+            containerIndex = (containerIndex + 1) % containerImages.length;
+            containerImages[containerIndex].classList.add('active');
+        }
+
+        setInterval(changeContainerImage, 4000); // Change image every 4 seconds
+
+        // JavaScript to detect scroll and show the text and image when they're in view
+        document.addEventListener('DOMContentLoaded', function () {
+            const text = document.querySelector('.text');
+            const galleryFooter = document.querySelector('.gallery-footer.fade-in');
+            const textContainer = document.querySelector('.text-container.fade-in');
+            const scrollText = document.querySelector('.scroll-text');
+            const scrollImage = document.querySelector('.scroll-image img');
+
+            function checkScroll() {
+                const windowHeight = window.innerHeight;
+
+                // Check for the text element
+                const textRect = text.getBoundingClientRect();
+                if (textRect.top <= windowHeight * 0.8 && textRect.bottom >= 0) {
+                    text.classList.add('visible');
+                }
+
+                // Check for the gallery footer
+                const footerRect = galleryFooter.getBoundingClientRect();
+                if (footerRect.top <= windowHeight * 0.8 && footerRect.bottom >= 0) {
+                    galleryFooter.classList.add('visible');
+                }
+
+                // Check for the text container
+                const textContainerRect = textContainer.getBoundingClientRect();
+                if (textContainerRect.top <= windowHeight * 0.8 && textContainerRect.bottom >= 0) {
+                    textContainer.classList.add('visible');
+                }
+
+                // Check for the scroll text
+                const scrollTextRect = scrollText.getBoundingClientRect();
+                if (scrollTextRect.top <= windowHeight * 0.8 && scrollTextRect.bottom >= 0) {
+                    scrollText.classList.add('visible');
+                }
+
+                // Check for the scroll image
+                const scrollImageRect = scrollImage.getBoundingClientRect();
+                if (scrollImageRect.top <= windowHeight * 0.8 && scrollImageRect.bottom >= 0) {
+                    scrollImage.classList.add('visible');
+                }
+            }
+
+            // Run checkScroll initially to see if the elements are already in view
+            checkScroll();
+
+            // Run checkScroll when the page is scrolled
+            window.addEventListener('scroll', checkScroll);
+        });
+
+        // Select elements to animate
+        const textBlock = document.querySelector('.scroll-text');
+        const imageBlock = document.querySelector('.scroll-image');
+
+        // Function to check if an element is in the viewport
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+            );
+        }
+
+        // Add scroll event listener
+        window.addEventListener('scroll', () => {
+            if (isInViewport(textBlock)) {
+                textBlock.classList.add('visible'); // Add class to trigger animation
+            }
+            if (isInViewport(imageBlock)) {
+                imageBlock.classList.add('visible'); // Add class to trigger animation
+            }
+        });
+    </script>
+</body>
+</html>
