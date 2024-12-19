@@ -6,131 +6,117 @@
     <title>Responsive Navbar with Image Gallery</title>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     
     
-    <style>/* Basic reset for the page */
+    <style>
+        /* Basic reset for the page */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         /* Body and font setup */
         body {
             font-family: 'Lora', serif;
             background-color: #fefefe; /* Background color for padding */
         }
-        
+
         /* Audiowide font for the title */
-        /* General Navbar Styles */
-        .audiowide-regular {
+       /* General Navbar Styles */
+       .audiowide-regular {
             font-family: 'Audiowide', sans-serif;
             font-weight: 400;
             font-style: normal;
             font-size: 36px;
             text-align: center;
         }
-        
-        .navbar {
-            background-color: #ffffff;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            transition: background-color 0.3s ease; /* Transition for background change */
-        }
-        
-        .nav-list {
-            list-style-type: none;
-            display: flex;
-            padding-left: 0;
-            margin-left: auto;
-            margin-right: auto;
-            transition: max-height 0.3s ease-out;
-        }
-        
-        .nav-item {
-            position: relative;
-            margin: 0 15px;
-        }
-        
-        .nav-link {
-            display: block;
-            padding: 10px 25px;
-            color: black;
-            text-decoration: none;
-            font-size: 18px;
-            transition: all 0.3s ease;
-            border-radius: 25px;
-            background-color: #ffffff;
-        }
-        
-        /* Hover effects for desktop */
-        .nav-item:hover .nav-link {
-            background-color: #cecece;
-            color: black;
-            transform: scale(1.1);
-        }
-        
-        /* Mobile touch interaction simulation */
-        .nav-item:active .nav-link, .nav-link:focus {
-            background-color: #cecece;
-            color: black;
-            transform: scale(1.1);
-        }
-        
-        /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            font-size: 30px;
-            cursor: pointer;
-            color: black;
-        }
-        
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .hamburger {
-                display: block;
-            }
-        
-            .nav-list {
-                flex-direction: column;
-                max-height: 0;
-                overflow: hidden;
-                width: 100%;
-                background-color: #ffffff;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                transition: max-height 0.3s ease-out;
-            }
-        
-            .nav-list.open {
-                max-height: 500px; /* Adjust as needed for your menu items */
-            }
-        
-            .nav-item {
-                margin: 0;
-                text-align: center;
-            }
-        
-            .nav-link {
-                font-size: 20px;
-                padding: 15px;
-                width: 100%;
-            }
-        
-            .nav-link:focus, .nav-item:active .nav-link {
-                background-color: #cecece;
-                color: black;
-                transform: scale(1.1);
-            }
-        }
-        
+.navbar {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-list {
+    list-style-type: none;
+    display: flex;
+    padding-left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    transition: max-height 0.3s ease-out;
+}
+
+.nav-item {
+    position: relative;
+    margin: 0 15px;
+}
+
+.nav-link {
+    display: block;
+    padding: 10px 25px;
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    background-color: #ffffff;
+}
+
+.nav-item:hover .nav-link {
+    background-color: #cecece;
+    color: black;
+    transform: scale(1.1);
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: black;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+
+    .nav-list {
+        flex-direction: column;
+        max-height: 0;
+        overflow: hidden;
+        width: 100%;
+        background-color: #ffffff;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-list.open {
+        max-height: 500px; /* Adjust as needed for your menu items */
+    }
+
+    .nav-item {
+        margin: 0;
+        text-align: center;
+    }
+
+    .nav-link {
+        font-size: 20px;
+        padding: 15px;
+        width: 100%;
+    }
+}
+
         /* Gallery styles */
         .gallery {
             display: flex;
@@ -146,7 +132,7 @@
             margin: 20px auto; /* Center the gallery */
             margin-top: 0px;
         }
-        
+
         .gallery::before {
             content: '';
             position: absolute;
@@ -157,7 +143,7 @@
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent); /* Gradient from black to transparent */
             z-index: 1; /* Place it above the images but below the text */
         }
-        
+
         .gallery img {
             position: absolute; /* Positioning for transition */
             top: 0;
@@ -168,11 +154,11 @@
             transition: opacity 1s ease, transform 0.5s ease; /* Fade effect */
             z-index: 0; /* Place images below the gradient */
         }
-        
+
         .gallery img.active {
             opacity: 1; /* Show active image */
         }
-        
+
         /* Button styles */
         .nav-button {
             position: absolute;
@@ -188,19 +174,15 @@
             padding:  10px; /* Padding for buttons */
             border-radius: 50%;
         }
-        
-        .nav-button:hover {
-            transform: scale(1.2); /* Add a scale effect on hover */
-        }
-        
+
         .prev-button {
             left:  10px;
         }
-        
+
         .next-button {
             right: 10px;
         }
-        
+
         /* Text display on image */
         .image-text {
             position: absolute;
@@ -214,11 +196,11 @@
             font-family: Garamond, Georgia, Times, Serif;
             z-index: 10; /* Ensure text is above the images and gradient */
         }
-        
+
         .first-word {
             color: #f0e8be; /* Set the color for the first word */
         }
-        
+
         /* Combined container styles */
         .container {
             display: flex;
@@ -227,7 +209,7 @@
             margin: 20px auto;
             overflow: hidden;
         }
-        
+
         /* Left side (Images with zoom-in effect) */
         .image-container {
             flex: 1;
@@ -236,7 +218,7 @@
             border-radius: 30%;
             background-color:#f0e8be ;
         }
-        
+
         .image-container img {
             width: 100%;
             height: 100%;
@@ -248,12 +230,11 @@
             transform: scale(1);
             transition: transform 1s ease, opacity 1s ease;
         }
-        
         .image-container img.active {
             opacity: 1;
             transform: scale(1.2);
         }
-        
+
         /* Right side (Sliding text) */
         .text-container {
             flex: 1;
@@ -270,13 +251,20 @@
             opacity: 0; /* Initially hide text */
             transition: transform 3s ease-out, opacity 3s ease-out; /* Smooth transition */
         }
-        
+
         /* Visible class will bring text into view from right */
         .text-container.visible {
             transform: translateX(0); /* Slide in from the right */
             opacity: 1;
         }
-        
+
+        /* Styling for the paragraph text */
+        .text {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+        }
+
         /* Footer styles */
         .gallery-footer {
             text-align: center;
@@ -289,18 +277,18 @@
             opacity: 0; /* Start as invisible */
             transition: transform 0.8s ease-out, opacity 0.8s ease-out; /* Smooth transition */
         }
-        
+
         .gallery-footer.visible {
             transform: translateY(0); /* Slide in to normal position */
             opacity: 1; /* Make visible */
         }
-        
+
         strong {
             font-size: 4rem;
             text-align: center;
             display: inline-block;
         }
-        
+
         /* Style for each word */
         .word {
             display: inline-block;
@@ -308,7 +296,7 @@
             transform: translateY(-100%); /* Start from above */
             animation: slideIn 3.5s forwards; /* Animation for sliding */
         }
-        
+
         /* Delay for each word to create a staggered effect */
         .word:nth-child(1) {
             animation-delay: 0.1s;
@@ -335,9 +323,9 @@
             animation-delay: 0.8s;
         }
         .word:nth-child(9) {
-            animation-delay: 0.9s;
+            animation-delay: 0. 9s;
         }
-        
+
         /* Sliding animation */
         @keyframes slideIn {
             0% {
@@ -349,47 +337,41 @@
                 opacity: 1; /* Make the word fully visible */
             }
         }
-        
+
         .highlight {
             color: #000000; /* Blue color for "Passionately Designing Spaces" */
         }
-        
+
         .secondary {
             color: #333; /* Dark grey for "Feel Like Home" */
         }
-        
+
         /* Responsive design */
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
                 height: auto;
             }
-        
+
             .image-container, .text-container {
                 height: 50%;
             }
-        
+
             .nav-list {
                 flex-direction: column;
                 align-items: center;
             }
-        
+
             .nav-item {
                 margin-bottom: 10px;
                 margin-right: 0;
             }
-        
+
             .navbar {
                 flex-direction: column;
             }
-        
-            .nav-link:focus, .nav-item:active .nav-link {
-                background-color: #cecece;
-                color: black;
-                transform: scale(1.1);
-            }
         }
-        
+
         .aboutus {
             text-align: center;
             font-size: 30px;
@@ -403,7 +385,7 @@
             color: white;
             padding: 20px 10px;
         }
-        
+
         .footer-container {
             display: flex;
             flex-wrap: wrap;
@@ -412,29 +394,29 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .footer-info {
             flex: 1;
             min-width: 250px;
             margin: 10px;
         }
-        
+
         .footer-info h4 {
             margin-bottom: 10px;
             font-size: 1.2rem;
         }
-        
+
         .footer-info p, .footer-info a {
             color: #ccc;
             font-size: 0.9rem;
             margin: 5px 0;
             text-decoration: none;
         }
-        
+
         .footer-info a:hover {
             color: #fff;
         }
-        
+
         .footer-social {
             display: flex;
             flex-wrap: wrap;
@@ -442,18 +424,18 @@
             justify-content: center;
             margin-top: 20px;
         }
-        
+
         .footer-social img {
             width: 32px;
             height: 32px;
             cursor: pointer;
             transition: transform 0.3s ease;
         }
-        
+
         .footer-social img:hover {
             transform: scale(1.1);
         }
-        
+
         @media (max-width: 768px) {
             .footer-container {
                 flex-direction: column;
@@ -463,66 +445,91 @@
                 margin: 10px auto;
             }
         }
-        
+
         .scroll-container {
-            display: flex;
-            flex-wrap: wrap; /* Allow wrapping for smaller screens */
-            align-items: center;
-            justify-content: space-between;
-            padding: 100px 20px; /* Adjust padding for better responsiveness */
-            gap: 20px;
-        }
-        
-        /* Text Block Styling */
-        .scroll-text {
-            flex: 1;
-            max-width: 500px; /* Limit max width for consistency */
-            opacity: 0; /* Initially hidden */
-            line-height: 1.8; /* Adjust line spacing for readability */
-            font-family: Arial, sans-serif;
-            transform: translateX(-100px); /* Move left off-screen */
-            transition: all 0.6s ease-out; /* Smooth animation */
-            padding: 10px;
-            text-align: justify;
-            box-sizing: border-box;
-            margin-left: 250px; /* Include padding in width */
-            height: 100%; /* Ensure it takes full height */
-            overflow: hidden; /* Ensure text doesn't overflow */
-        }
-        
-        /* Add visibility class to reveal text */
-        .scroll-text.visible {
-            opacity: 1;
-            transform: translateX(0); /* Slide into view */
-        }
-        
-        /* Image Block Styling */
-        .scroll-image {
-            flex: 1;
-            max-width: 500px; /* Limit max width for consistency */
-            opacity: 0; /* Initially hidden */
-            transform: translateX(100px); /* Move right off-screen */
-            transition: all 0.6s ease-out; /* Smooth animation */
-            box-sizing: border-box;
-            margin-right: 200px; /* Include padding in width */
-            height: 100%; /* Ensure it takes full height */
-        }
-        
-        /* Image styles */
-        .scroll-image img {
-            width: 100%;
-            height: 100%; /* Ensure the image takes full height of its container */
-            object-fit: cover; /* Ensure image covers the area without distortion */
-            border-radius: 20px;
-        }
-        
-        /* Add visibility class to reveal image */
-        .scroll-image.visible {
-            opacity: 1;
-            transform: translateX(0); /* Slide into view */
-        }
-        
-        </style>
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    align-items: center;
+    justify-content: space-between;
+    padding: 100px 20px; /* Adjust padding for better responsiveness */
+    gap: 20px;
+}
+
+/* Text Block Styling */
+.scroll-text {
+    flex: 1;
+    max-width: 500px; /* Limit max width for consistency */
+    opacity: 0; /* Initially hidden */
+    line-height: 1.8; /* Adjust line spacing for readability */
+    font-family: Arial, sans-serif;
+    transform: translateX(-100px); /* Move left off-screen */
+    transition: all 0.6s ease-out; /* Smooth animation */
+    padding: 10px;
+    text-align: justify;
+    box-sizing: border-box;
+    margin-left: 250px; /* Include padding in width */
+    height: 100%; /* Ensure it takes full height */
+    overflow: hidden; /* Ensure text doesn't overflow */
+}
+
+/* Add visibility class to reveal text */
+.scroll-text.visible {
+    opacity: 1;
+    transform: translateX(0); /* Slide into view */
+}
+
+/* Image Block Styling */
+.scroll-image {
+    flex: 1;
+    max-width: 500px; /* Limit max width for consistency */
+    opacity: 0; /* Initially hidden */
+    transform: translateX(100px); /* Move right off-screen */
+    transition: all 0.6s ease-out; /* Smooth animation */
+    box-sizing: border-box;
+    margin-right: 200px; /* Include padding in width */
+    height: 100%; /* Ensure it takes full height */
+}
+
+/* Image styles */
+.scroll-image img {
+    width: 100%;
+    height: 100%; /* Ensure the image takes full height of its container */
+    object-fit: cover; /* Ensure image covers the area without distortion */
+    border-radius: 20px;
+}
+
+/* Add visibility class to reveal image */
+.scroll-image.visible {
+    opacity: 1;
+    transform: translateX(0); /* Slide into view */
+}
+
+/* Responsive Design for Mobile Screens */
+@media (max-width: 768px) {
+    .scroll-container {
+        flex-direction: column; /* Stack items vertically */
+        padding: 50px 20px; /* Reduce padding */
+    }
+
+    .scroll-text,
+    .scroll-image {
+        max-width: 100%; /* Full-width on smaller screens */
+        margin-left: 0; /* Remove left margin */
+        margin-right: 0; /* Remove right margin */
+    }
+
+    .scroll-text {
+        text-align: center; /* Center-align text for better appearance */
+        height: 50%; /* Limit text block height */
+        margin-bottom: 20px; /* Add space between text and image */
+    }
+
+    .scroll-image {
+        height: 50%; /* Limit image height to match text height */
+    }
+}
+
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -726,6 +733,11 @@ window.addEventListener('scroll', () => {
         imageBlock.classList.add('visible'); // Add class to trigger animation
     }
 });
+// Toggle the navigation menu on mobile
+document.querySelector('.hamburger').addEventListener('click', function() {
+    document.querySelector('.nav-list').classList.toggle('open');
+});
+
 
     </script>
 
